@@ -1,0 +1,93 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Management</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+      table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 5px;
+      text-align: left;
+    }
+    </style>
+  </head>
+
+  <body>
+    <nav>
+      <h1>Welcome "{{user.username}}"</h1>
+      <a href="{% url 'logout' %}"><button >Log Out</button></a></div></br></br>
+    </nav>
+
+    <div>
+      {%if students%}
+      {%for student in students%}
+        <div class ="container">
+        {% if student.image %}
+          <img src="{{ student.image.url }}" alt="Student Image" width="50" height="50"></br>
+          <p>{{student.s_name}}</p>
+        {% else %}
+          <p>No img</p>
+        {% endif %}
+        </div>
+        <table>
+        <tr>
+          <th>Student Name</th>
+          <td>{{student.s_name}}</td>
+        </tr>
+        <tr>
+          <th>Your Grade</th>
+          <td>{{student.grade}}</td>
+        </tr> 
+        <tr>
+          <th> Enrolled Class</th>
+          <td>{{student.class_enrolled}}</td></tr>
+        <tr>
+          <th>Email</th>
+          <td>{{user.email}}</td>
+        </tr>
+        </table></br>
+
+        {%if teachers%}
+          <table>
+          <thead>
+          <tr><th>Teachers in your class</th></tr>
+          </thead>         
+          <tbody>
+            {%for teacher in teachers%}
+              <tr><td>{{teacher.name}}</td></tr>
+            {%endfor%}
+          </tbody>
+          </table>        
+        {%endif%} 
+        
+      {%endfor%}
+      {% else %}
+        <p>You don't have any data available.</p> 
+      {% endif %}
+    </div>
+
+
+    <div style="border-radius:5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-left:90px; padding:50px;text-align: center;">
+      {%if messages%}
+        {%for message in messages%}
+          <div>{{message}}</div></br>
+        {%endfor%}
+      {%endif%}
+      <form action="{% url 'student_base_edit' user.id %}" method = 'POST'>
+        {%csrf_token%}
+        <p>Update Email</p>
+        <input type="text" name="email" placeholder="Email" required>
+        <button>Save</button>
+      </form>
+    </div>
+
+  </body>
+</html>

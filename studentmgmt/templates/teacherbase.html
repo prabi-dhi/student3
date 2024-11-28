@@ -1,0 +1,105 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <title>Student Management</title>
+    <style>
+      table, th, td {
+
+      margin-left:auto;
+      margin-right:auto;
+      margin-bottom:20px;
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 5px;
+      text-align: left;
+    }
+
+    </style>
+  </head>
+    <body>
+      <nav>
+        <h1>Welcome "{{user.username}}"</h1>
+        <a href="{% url 'logout' %}"><button>Log Out</button></a></div></br></br>
+      </nav>
+      <div class="messages">
+        {%if messages%}
+          {%for message in messages%}
+          {{message}}
+          {%endfor%}
+        {%endif%}
+      </div>
+
+      <div>
+        {%if teachers%}
+          {% for teacher in teachers%}
+            <table>
+              <tr>
+                <th>Your name</th>
+                <td>{{teacher.name}}</td>
+              </tr>
+              <tr><th>Department</th>
+              <td>{{teacher.department}}</td></tr>
+              <tr><th>Class Assigned</th>
+              <td>{{teacher.class_assigned}}</td></tr>
+              {%for subject in subjects%}
+                <tr>
+                  <th>Subject</th>
+                  <td>{{subject.sub_name}}</td>
+                </tr>
+              {%endfor%}
+      </div>
+             
+            </table>
+          {%endfor%}
+        
+      <div>
+          <table>
+            <thead>
+              <tr>
+                <th>Student name</th>
+                <th>Overall Grade</th>
+                <th>Enrolled Class</th>
+              <th>Image</th>
+              <th>View Student</th>
+              </tr>
+            </thead>
+            <tbody>
+            </div>        
+              {%for student in students%}
+                <tr>
+                  <td>{{student.s_name}}</td> 
+                  <td>{{student.grade}}</td>
+                  <td>{{student.class_enrolled.room_number}}</td>
+                  <td> 
+                    {% if student.image %}
+                      <img src="{{ student.image.url }}" alt="Student Image" width="50" height="50">
+                    {% else %}
+                      <p>No img</p>
+                    {% endif %}</td>
+                  <td><a href = "{% url 'student_marksheet' student.id%}">View</a></td>
+                </tr>
+              {%endfor%}
+              </tbody>
+            </table>
+      </div>
+    {%endif%}
+
+    <div>
+      {% block teacher_grade%}
+        {%for subject in subjects%}
+          <a href="{% url 'teacher_grade' subject.id %}">
+            <button>Students in {{subject.sub_name}}</button> </a>
+        {%endfor%}
+      {%endblock%}
+    </div>
+
+</body>
+  </html>
